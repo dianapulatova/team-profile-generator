@@ -41,7 +41,7 @@
   ```
 
   ### Usage
-  Portfolio
+  Team Memeber Generator
   
   
   ### License
