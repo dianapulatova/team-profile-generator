@@ -7,7 +7,7 @@
   ## Description
   Team profile generator - generates porfolios based on the user and admin input. 
 
-  ![Demo](Demo/team-gen-demo.gif)
+  ![Demo](Demo/Team-gen-demo.gif)
 
   ![Team Generator Demo](Demo/Team-gen-demo.mp4)
 
