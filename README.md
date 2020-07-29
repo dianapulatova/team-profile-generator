@@ -7,6 +7,8 @@
   ## Description
   Team profile generator - generates porfolios based on the user and admin input. 
 
+  ![Team Generator Demo](Demo/Team-gen-demo.mp4)
+
   <iframe width="560" height="315" src="https://www.youtube.com/embed/qsaIVJeemEU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
   
 
@@ -48,11 +50,13 @@
   Clone it, fork it but don't push any changes to master.
   
   ### Tests
-     ```
-    npm test
+     
+      
+      `  npm test
 
-    node app
-  ```
+        node app`
+      
+      
 
         
   ### Questions
