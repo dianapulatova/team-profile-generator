@@ -1,48 +1,26 @@
-//Dependencies==============================================
+// //Dependencies==============================================
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
-//Added util folder
-const util = require("util");
-//Installed jest npm i jest --save-dev
-const jest = require("jest");
 const path = require("path");
 const fs = require("fs");
-// Path to output folder in Develop folder
+// util - allows you to use write file, asynchronously.
+const util = require("util");
 const OUTPUT_DIR = path.resolve(__dirname, "output");
-// Path to team.html in output folder
 const outputPath = path.join(OUTPUT_DIR, "team.html");
-// render() method let's you pass the template into a team.html
-const render = require("./lib/htmlRenderer");
-// writeFile creates a new file --> html 
+// writefile will create html page
 const writeFileAsync = util.promisify(fs.writeFile);
+const render = require("./lib/htmlRenderer");
 
-// Questions=================================== 
-const teamArray = [];
-function newTeamMember() {
-  return inquirer
-    .prompt([
-      {
-        type: "confirm",
-        message: "Would you like to add anymore team members?",
-        name: "member",
-      },
-    ])
-    .then(function (yes) {
-      if (yes.member === true) {
-        promptQuestions();
-      } else {
-        renderFile();
-      }
-    })
-    .catch(function (err) {
-      console.log(err);
-    });
-}
-// Create questions for each team memeber 
-function promptQuestions() {
-  return inquirer
+
+
+// Write code to use inquirer to gather information about the development team members,
+// and to create objects for each team member (using the correct classes as blueprints!)
+let teamArray = [];
+
+function addTeamMember() {
+  inquirer
     .prompt([
       {
         type: "list",
@@ -62,18 +40,18 @@ function promptQuestions() {
             },
             {
               type: "input",
-              message: "What is your github username?",
-              name: "github",
-            },
-            {
-              type: "input",
-              message: "What is your employee ID?",
+              message: "What is your ID?",
               name: "id",
             },
             {
               type: "input",
               message: "What is your email address?",
               name: "email",
+            },
+            {
+              type: "input",
+              message: "What is your Github username?",
+              name: "github",
             },
           ])
           .then(function (engineerReply) {
@@ -83,43 +61,7 @@ function promptQuestions() {
               engineerReply.email,
               engineerReply.github
             );
-            console.log(newEngineer);
             teamArray.push(newEngineer);
-            newTeamMember();
-          });
-      } else if (reply.role === "Manager") {
-        inquirer
-          .prompt([
-            {
-              type: "input",
-              message: "What is your name?",
-              name: "name",
-            },
-            {
-              type: "input",
-              message: "What is your email address?",
-              name: "email",
-            },
-            {
-              type: "input",
-              message: "What is your employee id?",
-              name: "id",
-            },
-            {
-              type: "input",
-              message: "What is your office number?",
-              name: "office",
-            },
-          ])
-          .then(function (managerReply) {
-            const newManager = new Manager(
-              managerReply.name,
-              managerReply.id,
-              managerReply.email,
-              managerReply.office
-            );
-            console.log(newManager);
-            teamArray.push(newManager);
             newTeamMember();
           });
       } else if (reply.role === "Intern") {
@@ -132,17 +74,17 @@ function promptQuestions() {
             },
             {
               type: "input",
-              message: "What is your email address?",
-              name: "email",
-            },
-            {
-              type: "input",
-              message: "What is your employee id?",
+              message: "What is your ID?",
               name: "id",
             },
             {
               type: "input",
-              message: "Where did you go to school?",
+              message: "What is your email?",
+              name: "email",
+            },
+            {
+              type: "input",
+              message: "Where do you go to school?",
               name: "school",
             },
           ])
@@ -153,8 +95,41 @@ function promptQuestions() {
               internReply.email,
               internReply.school
             );
-            console.log(newIntern);
             teamArray.push(newIntern);
+            newTeamMember();
+          });
+      } else if (reply.role === "Manager") {
+        inquirer
+          .prompt([
+            {
+              type: "input",
+              message: "What is your name?",
+              name: "name",
+            },
+            {
+              type: "input",
+              message: "What is your ID?",
+              name: "id",
+            },
+            {
+              type: "input",
+              message: "What is your email?",
+              name: "email",
+            },
+            {
+              type: "input",
+              message: "What is your office number?",
+              name: "officeNumber",
+            },
+          ])
+          .then(function (managerReply) {
+            const newManager = new Manager(
+              managerReply.name,
+              managerReply.id,
+              managerReply.email,
+              managerReply.officeNumber
+            );
+            teamArray.push(newManager);
             newTeamMember();
           });
       }
@@ -163,21 +138,48 @@ function promptQuestions() {
       console.log(err);
     });
 }
-
-function init() {
-  promptQuestions();
+// creates a prompt for a new team member to be used at the end of adding new team members, else push toHTML
+function newTeamMember() {
+  return inquirer
+    .prompt([
+      {
+        type: "confirm",
+        message: "Would you like to add another Team member?",
+        name: "addnew",
+      },
+    ])
+    .then(function (userAddNew) {
+      if (userAddNew.addnew === true) {
+        addTeamMember();
+      } else {
+        pushToHTML();
+      }
+    });
 }
-init();
-
-//The async and await keywords enable asynchronous, promise-based behavior to be written in a cleaner style, avoiding the need to explicitly configure promise chains.
-async function renderFile() {
-  try {
-    const userAnswers = await render(teamArray);
-    writeFileAsync(outputPath, userAnswers);
-  } catch (err) {
-    console.log(err);
-  }
+// pushes the data to HTML
+function pushToHTML() {
+  const createHtml = render(teamArray);
+  writeFileAsync(outputPath, createHtml);
 }
+addTeamMember();
 
+// After the user has input all employees desired, call the `render` function (required
+// above) and pass in an array containing all employee objects; the `render` function will
+// generate and return a block of HTML including templated divs for each employee!
 
+// After you have your html, you're now ready to create an HTML file using the HTML
+// returned from the `render` function. Now write it to a file named `team.html` in the
+// `output` folder. You can use the variable `outputPath` above target this location.
+// Hint: you may need to check if the `output` folder exists and create it if it
+// does not.
+
+// HINT: each employee type (manager, engineer, or intern) has slightly different
+// information; write your code to ask different questions via inquirer depending on
+// employee type.
+
+// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
+// and Intern classes should all extend from a class named Employee; see the directions
+// for further information. Be sure to test out each class and verify it generates an
+// object with the correct structure and methods. This structure will be crucial in order
+// for the provided `render` function to work! ```
 
