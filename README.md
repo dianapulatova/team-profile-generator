@@ -11,8 +11,8 @@
 
   ![Team Generator Demo](Demo/Team-gen-demo.mp4)
 
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/qsaIVJeemEU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-  
+  ![Team Generator Demo Video](https://www.youtube.com/embed/qsaIVJeemEU)
+
 
  
 
