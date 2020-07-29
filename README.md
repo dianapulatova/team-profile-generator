@@ -11,7 +11,7 @@
 
   ![Team Generator Demo](Demo/Team-gen-demo.mp4)
 
-  ![Team Generator Demo Video](https://www.youtube.com/embed/qsaIVJeemEU)
+  [Team Generator Demo Video](https://www.youtube.com/embed/qsaIVJeemEU)
 
 
  
